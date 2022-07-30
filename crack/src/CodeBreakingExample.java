@@ -8,6 +8,7 @@ public class CodeBreakingExample {
     public static void main(String[] args) throws InterruptedException {
 
         // 'N' from a public key, and an encrypted message.
+        // NOTE: updated 220729 (Patrik)
         BigInteger n = new BigInteger("113546829441971119");
         String ciphertext = "2o1k5jnv4x102gqilsqmp194dwj6k4nu31ycsrg6oo9407oi83447b3kpsuckqeey2nrenev0dv8qoxbpyonlbyojk8opwrgb1h0lt7zr39ygsb35aky0hlqz624yninojlkhij2vapt85qafyxmyeo8hxx0g2el2bd57qufnmwkkv0t";
 

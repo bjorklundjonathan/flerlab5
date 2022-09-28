@@ -25,6 +25,7 @@ public class AlarmMonitor {
 
     public void toggleAlarm() {
         alarmOn = alarmOn ^ true;
+        out.setAlarmIndicator(alarmOn);
     }
 
     public void alarm() {

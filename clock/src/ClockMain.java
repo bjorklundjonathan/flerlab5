@@ -12,8 +12,11 @@ public class ClockMain {
         CounterMonitor mainMonitor = new CounterMonitor(emulator.getOutput());
         CountMainClock clock = new CountMainClock(mainMonitor);
         AlarmMonitor alarmMonitor = new AlarmMonitor(emulator.getOutput());
+        AlarmThread alarm = new AlarmThread(alarmMonitor, mainMonitor);
 
         clock.start();
+        alarm.start();
+
 
         ClockInput  in  = emulator.getInput();
         Semaphore mutex = new Semaphore(1);
@@ -34,6 +37,7 @@ public class ClockMain {
 
             switch (choice) {
                 case ClockInput.CHOICE_SET_TIME:
+                    System.out.println("i case");
                     mainMonitor.setTime(h, m, s);
                     break;
                 case ClockInput.CHOICE_SET_ALARM:
@@ -45,7 +49,6 @@ public class ClockMain {
             }
 
             System.out.println("choice=" + choice + " h=" + h + " m=" + m + " s=" + s);
-            in.getSemaphore().release();
             mutex.release();
         }
     }

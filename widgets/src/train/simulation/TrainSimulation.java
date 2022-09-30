@@ -1,35 +1,40 @@
 package train.simulation;
 
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.ArrayList;
+import java.util.List;
 
 import train.model.Route;
-import train.model.Segment;
 import train.view.TrainView;
-import train.simulation.ThreeTrain;
 
 public class TrainSimulation {
-
-    private static LinkedList<Segment> queue = new LinkedList<>();
 
     public static void main(String[] args) {
 
         TrainView view = new TrainView();
-        
-        Route route1 = view.loadRoute();
-        //Route route2 = view.loadRoute();
-        //Route route3 = view.loadRoute();
+
+        List<ThreeTrain> trains = new ArrayList<>();
 
         TrainMonitor monitor = new TrainMonitor();
 
-        ThreeTrain train1 = new ThreeTrain(route1, monitor);
-        //ThreeTrain train2 = new ThreeTrain(route2, monitor);
-        //ThreeTrain train3 = new ThreeTrain(route3, monitor);
+        for(int i = 0 ; i < 20 ; i++) {
+            Route route = view.loadRoute();
+            trains.add(new ThreeTrain(route, monitor));
+            trains.get(i).start();
+        }
+        
+        Route route1 = view.loadRoute();
+        Route route2 = view.loadRoute();
+        Route route3 = view.loadRoute();
 
-        train1.start();
+        
+
+        ThreeTrain train1 = new ThreeTrain(route1, monitor);
+        ThreeTrain train2 = new ThreeTrain(route2, monitor);
+        ThreeTrain train3 = new ThreeTrain(route3, monitor);
+
+        //train1.start();
         //train2.start();
         //train3.start();
-        
     }
 
 }

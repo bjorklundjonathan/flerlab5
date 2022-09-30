@@ -15,13 +15,21 @@ public class TrainMonitor {
     Semaphore segmentFree = new Semaphore(1);
 
 
-    public void enterSegment(Segment segment) throws InterruptedException {
-        
+    public synchronized boolean segmentBusy(Segment segment) {
+        return busySegments.contains(segment);
+    }
+
+
+    public synchronized void enterSegment(Segment segment) throws InterruptedException {
+        while(busySegments.contains(segment)) {
+            wait();
+        }
         busySegments.add(segment);
     }
 
-    public void exitSegment(Segment segment) {
+    public synchronized void exitSegment(Segment segment) {
         busySegments.remove(segment);
+        notifyAll();
     }
     
 }

@@ -1,6 +1,8 @@
 package train.simulation;
 
 import java.util.LinkedList;
+import java.util.concurrent.Semaphore;
+
 import train.model.Segment;
 import train.model.Route;
 
@@ -16,18 +18,13 @@ public class ThreeTrain extends Thread {
     }
 
     public void run() {
-        
-        Segment first = route.next();
-        Segment second = route.next();
-        Segment third = route.next();
 
         try {
-            System.out.println("adding?");
-            addSegment(first);
-            System.out.println("added one");
-            addSegment(second);
-            addSegment(third);
-            System.out.println("added");
+            for(int i = 0 ; i < 4 ; i++) {
+                Segment seg = route.next();
+                addSegment(seg);
+            }
+    
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -46,17 +43,15 @@ public class ThreeTrain extends Thread {
     }
 
     private void addSegment(Segment seg) throws InterruptedException {
-        System.out.println("trying");
         monitor.enterSegment(seg);
-        System.out.println("done");
         seg.enter();
         queue.addFirst(seg);
     }
 
     private void remove() {
         Segment seg = queue.removeLast();
-        monitor.exitSegment(seg);
         seg.exit();
+        monitor.exitSegment(seg);
     }
 }
  

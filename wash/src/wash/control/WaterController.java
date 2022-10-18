@@ -10,6 +10,7 @@ public class WaterController extends ActorThread<WashingMessage> {
     WashingIO io;
     boolean fill = false;
     boolean drain = false;
+    double wantedLevel = -1;
     ActorThread<WashingMessage> sender = null;
 
     public WaterController(WashingIO io) {
@@ -33,33 +34,42 @@ public class WaterController extends ActorThread<WashingMessage> {
                 WashingMessage m = receiveWithTimeout(1000/Settings.SPEEDUP);
                 if(m != null) {
                     sender = m.getSender();
+                    System.out.println("ny sender");
                     switch(m.getOrder()) {
                         case WATER_IDLE:
-                            fill = false;
-                            drain = false;
+                            io.drain(false);
+                            io.fill(false);
+                            wantedLevel = -1;
                             sender.send(new WashingMessage(this, Order.ACKNOWLEDGMENT));
                             break;
                         case WATER_DRAIN:
-                            fill = false;
-                            drain = true;
+                            io.drain(true);
+                            io.fill(false);
+                            wantedLevel = 0;
                             break;
                         case WATER_FILL:
-                            fill = true;
-                            drain = false;
+                            System.out.println("fyller?====");
+                            io.drain(false);
+                            io.fill(true);
+                            wantedLevel = WashingIO.MAX_WATER_LEVEL/2;
                             break;
                         default:
                             break;
                     }
                 }
-                if(io.getWaterLevel() >= WashingIO.MAX_WATER_LEVEL/2 && fill) {
-                    fill = false;
+
+                if(io.getWaterLevel() >= wantedLevel && wantedLevel > 0) {
+                    io.fill(false);
+                    wantedLevel = -1;
                     sender.send(new WashingMessage(this, Order.ACKNOWLEDGMENT));
                     System.out.println("ack från full");
-                } else if (drain && io.getWaterLevel() <= 0) {
-                    sender.send(new WashingMessage(this, Order.ACKNOWLEDGMENT));
                 }
-                io.drain(drain);
-                io.fill(fill);
+                if (io.getWaterLevel() <= 0 && wantedLevel == 0) {
+                    wantedLevel = -1;
+                    sender.send(new WashingMessage(this, Order.ACKNOWLEDGMENT));
+                    System.out.println("ack från tom");
+                }
+
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

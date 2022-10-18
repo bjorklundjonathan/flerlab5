@@ -38,8 +38,11 @@ public class WashingProgram1 extends ActorThread<WashingMessage> {
             // Lock the hatch
             io.lock(true);
 
+            System.out.println("fyller");
             water.send(new WashingMessage(this, WATER_FILL));
+            System.out.println("inte ackat");
             ack();
+            System.out.println("ackat");
 
             System.out.println("setting SPIN_SLOW...");
             spin.send(new WashingMessage(this, SPIN_SLOW));
@@ -79,6 +82,7 @@ public class WashingProgram1 extends ActorThread<WashingMessage> {
             ack();
 
             Thread.sleep(5 * 60000 / Settings.SPEEDUP);
+            System.out.println("klar cent");
 
             water.send(new WashingMessage(this, WATER_IDLE));
             ack();
@@ -91,6 +95,7 @@ public class WashingProgram1 extends ActorThread<WashingMessage> {
             
             // Now that the barrel has stopped, it is safe to open the hatch.
             io.lock(false);
+            System.out.println("Program done.");
         } catch (InterruptedException e) {
             
             // If we end up here, it means the program was interrupt()'ed:

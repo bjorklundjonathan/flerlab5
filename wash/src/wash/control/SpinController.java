@@ -39,8 +39,9 @@ public class SpinController extends ActorThread<WashingMessage> {
                             spin = true;
                             break;
                         case SPIN_FAST:
+                            System.out.println("spinnar fast");
                             io.setSpinMode(WashingIO.SPIN_FAST);
-                            spin = true;
+                            spin = false;
                             break;
                         case SPIN_OFF:
                             io.setSpinMode(WashingIO.SPIN_IDLE);

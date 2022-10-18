@@ -6,7 +6,7 @@ import wash.simulation.WashingSimulator;
 
 public class Wash {
 
-    public static void main(String[] args) throws InterruptedException {
+     public static void main(String[] args) throws InterruptedException {
         WashingSimulator sim = new WashingSimulator(Settings.SPEEDUP);
         
         WashingIO io = sim.startSimulation();
@@ -32,10 +32,11 @@ public class Wash {
                     spin.send(new WashingMessage(program, WashingMessage.Order.SPIN_OFF));
                     break;
                 case 1:
+                    System.out.println("kör prg1");
                     program = new WashingProgram1(io, temp, water, spin);
                     break;
                 case 2:
-                    program = new WashingProgram2();
+                    program = new WashingProgram2(io, temp, water, spin);
                     break;
                 case 3:
                     program = new WashingProgram3(io, temp, water, spin);

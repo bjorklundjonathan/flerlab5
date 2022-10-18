@@ -32,7 +32,7 @@ public class CodeBreaker implements SnifferCallback {
         workList        = w.getWorkList();
         progressList    = w.getProgressList();
         mainProgressBar = w.getProgressBar();
-        //w.enableErrorChecks();
+        w.enableErrorChecks();
 
     }
     
@@ -69,9 +69,9 @@ public class CodeBreaker implements SnifferCallback {
         SwingUtilities.invokeLater(() -> {
             wrkItem.add(breakButton);
             workList.add(wrkItem);
-            mainProgressBar.setMaximum(mainProgressBar.getMaximum() + 1000000);
             breakButton.addActionListener(e -> {
 
+                mainProgressBar.setMaximum(mainProgressBar.getMaximum() + 1000000);
                 progressList.add(pgItem);
                 workList.remove(wrkItem);
                 pgItem.add(cancelButton);

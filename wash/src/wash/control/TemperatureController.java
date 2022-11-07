@@ -9,6 +9,7 @@ public class TemperatureController extends ActorThread<WashingMessage> {
     // TODO: add attributes
     WashingIO io;
     int temp = 0;
+    double minTemp = 0;
     int dt = 10;
     boolean heating = false;
     boolean cooling = false;
@@ -30,19 +31,22 @@ public class TemperatureController extends ActorThread<WashingMessage> {
                         case TEMP_IDLE:
                             temp = 0;
                             cooling = true;
+                            peaked = false;
                             sender.send(new WashingMessage(this, Order.ACKNOWLEDGMENT));
                             break;
                         case TEMP_SET_40:
                             temp = 40;
+                            minTemp = 38.5;
                             break;
                         case TEMP_SET_60:
                             temp = 60;
+                            minTemp = 58.5;
                             break;
                         default:
                             break;
                     }
                 }
-                if(io.getTemperature() < 38.5 && temp > 0) {
+                if(io.getTemperature() < minTemp && temp > 0) {
                     io.heat(true);
                     heating = true;
                 }

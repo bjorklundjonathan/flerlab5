@@ -34,7 +34,6 @@ public class WaterController extends ActorThread<WashingMessage> {
                 WashingMessage m = receiveWithTimeout(1000/Settings.SPEEDUP);
                 if(m != null) {
                     sender = m.getSender();
-                    System.out.println("ny sender");
                     switch(m.getOrder()) {
                         case WATER_IDLE:
                             io.drain(false);
@@ -48,7 +47,6 @@ public class WaterController extends ActorThread<WashingMessage> {
                             wantedLevel = 0;
                             break;
                         case WATER_FILL:
-                            System.out.println("fyller?====");
                             io.drain(false);
                             io.fill(true);
                             wantedLevel = WashingIO.MAX_WATER_LEVEL/2;
@@ -62,12 +60,10 @@ public class WaterController extends ActorThread<WashingMessage> {
                     io.fill(false);
                     wantedLevel = -1;
                     sender.send(new WashingMessage(this, Order.ACKNOWLEDGMENT));
-                    System.out.println("ack från full");
                 }
                 if (io.getWaterLevel() <= 0 && wantedLevel == 0) {
                     wantedLevel = -1;
                     sender.send(new WashingMessage(this, Order.ACKNOWLEDGMENT));
-                    System.out.println("ack från tom");
                 }
 
             } catch (InterruptedException e) {

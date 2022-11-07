@@ -38,18 +38,14 @@ public class WashingProgram1 extends ActorThread<WashingMessage> {
             // Lock the hatch
             io.lock(true);
 
-            System.out.println("fyller");
             water.send(new WashingMessage(this, WATER_FILL));
-            System.out.println("inte ackat");
             ack();
-            System.out.println("ackat");
 
             System.out.println("setting SPIN_SLOW...");
             spin.send(new WashingMessage(this, SPIN_SLOW));
             ack();
 
             temp.send(new WashingMessage(this, TEMP_SET_40));
-            System.out.println("try heat");
             ack();
             
             // Instruct SpinController to rotate barrel slowly, back and forth
@@ -82,7 +78,6 @@ public class WashingProgram1 extends ActorThread<WashingMessage> {
             ack();
 
             Thread.sleep(5 * 60000 / Settings.SPEEDUP);
-            System.out.println("klar cent");
 
             water.send(new WashingMessage(this, WATER_IDLE));
             ack();
